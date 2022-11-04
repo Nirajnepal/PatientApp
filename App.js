@@ -1,16 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import MainScreen from './app/screens/MainScreen';
+import React, { useState } from 'react';
+import Home from './app/screens/Home';
+import Navigator from './routes/homeStack'
 
 export default function App() {
-    return <MainScreen/>
+ return (
+  <Navigator/>
+ )
 }
 
-const styles = StyleSheet.create({
-  contagitiner: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
