@@ -1,10 +1,13 @@
+import 'react-native-gesture-handler';
 import React, { useState } from 'react';
-import Home from './app/screens/Home';
 import Navigator from './routes/homeStack'
+import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {
  return (
-  <Navigator/>
+    <NavigationContainer>
+        <Navigator/>
+    </NavigationContainer>  
  )
 }
 
