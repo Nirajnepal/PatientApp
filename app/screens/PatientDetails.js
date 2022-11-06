@@ -21,11 +21,11 @@ render(){
 
       <Text style={[styles.labelText]}>Address:   Toronto, Canada</Text>
       <View style={[styles.dividerLine]} />
-      <Text style={styles.labelText}>College:     Centennial College</Text>
+      <Text style={styles.labelText}>D.O.B:     Centennial College</Text>
       <View style={[styles.dividerLine]} />
-      <Text style={styles.labelText}>Laptop:      MSI</Text>
+      <Text style={styles.labelText}>Doctor:      MSI</Text>
       <View style={[styles.dividerLine]} />
-      <Text style={styles.labelText}>Stack:         React Native</Text>
+      <Text style={styles.labelText}>Department:       React Native</Text>
     </View>;
   }
 
