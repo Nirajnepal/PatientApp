@@ -1,15 +1,6 @@
 import React from "react";
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Image } from 'react-native';
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { globalStyles } from "../../styles/global";
-
-// export default function Home(){
-//     return (
-//         <View style={globalStyles.container}>
-//             <Text style={globalStyles.titleText}>Home Screen</Text>
-//         </View>
-//     )
-// }
 
 class Home extends React.Component {
     constructor(props){
@@ -18,21 +9,56 @@ class Home extends React.Component {
 
     openPatientDetails = () => {
         const { navigation } = this.props
-        navigation.navigate('PatientDetails');
+        navigation.navigate('PatientLists');
     }
 
     render(){
         return (
-            <>
-                <View style="{globalStyles.container}">
-                    <TouchableOpacity onPress={ this.openPatientDetails }>
-                        <Text style={globalStyles.titleText}>Home Screen</Text>
-                    </TouchableOpacity>
-                </View>
-            </>
+            <View style={styles.container}>
+                <TouchableOpacity style = {styles.button} onPress = {this.openPatientDetails}>
+                <Image source={require('../../assets/user.png')} style={[styles.imageStyle]} />
+                <Text style={styles.labelStyle}>Patients</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style = {styles.button} onPress = {this.openPatientDetails}>
+                <Image source={require('../../assets/patient.png')} style={[styles.imageStyle]} />
+                <Text style={styles.labelStyle}>Records</Text>
+                </TouchableOpacity>
+
+            </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    container:{
+        flex: 1,
+        flexDirection: 'row',
+        paddingHorizontal: 10,
+        paddingVertical: 10, 
+        justifyContent: 'center'
+    },
+    button: {
+        paddingHorizontal: 10,
+        paddingVertical: 30,
+        alignItems: "center",
+        backgroundColor: "#FFFFFF",
+        borderRadius: 20,
+        margin : 10,
+      },
+    labelStyle:{
+        fontSize: 16,
+        letterSpacing: 2.0,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    imageStyle:{
+        height:50,resizeMode: 'contain',marginBottom: 10 
+      },
+      imageStyleMarginRight:{
+        height:50,resizeMode: 'contain', marginLeft: 20
+      },
+});
 
 export default Home;
 
