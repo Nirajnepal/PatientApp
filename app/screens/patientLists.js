@@ -2,24 +2,29 @@ import React from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, Image } from 'react-native';
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const DATA = [
-  {
-    id: '1',
-    title: 'First Item',
-  },
-  {
-    id: '2',
-    title: 'Second Item',
-  },
-  {
-    id: '3',
-    title: 'Third Item',
-  },
-];
-
-
-
 class PatientsLists extends React.Component {
+
+    constructor(){
+      super();
+      this.state = {
+        data: []
+      }
+    }
+
+    componentDidMount(){
+      this.apiCall();
+    }
+
+    async apiCall(){
+      try {
+        let response = await fetch("http://192.168.5.10:8080/api/patients");
+        let responseJson =  await response.json()
+        this.setState({ data: responseJson })
+      } catch (err) {
+        console.warn({ message: err.message })
+      }
+
+    }
 
     patientDetails = () => {
         const { navigation } = this.props
@@ -32,20 +37,20 @@ class PatientsLists extends React.Component {
     <View style = {styles.item}>
         <Image source={require('../../assets/user.png')} style={[styles.imageStyle]} />
         <Text>       </Text>
-        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.title}>{[item.first_name,item.last_name].join(' ')}</Text>
     </View>
     </TouchableOpacity>
     </>
-  );
+    );
 
   
     render(){
     return (
         <SafeAreaView style={styles.container}>
         <FlatList
-            data={DATA}
+            data={this.state.data}
             renderItem={this.renderItem}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item._id}
         />
         </SafeAreaView>
     );
