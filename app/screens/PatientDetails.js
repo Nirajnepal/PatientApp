@@ -1,40 +1,47 @@
 import React from "react";
 import { StyleSheet, Text, View, SafeAreaView, Image, Divider } from 'react-native';
-
+import {useNavigation} from "@react-navigation/native";
 
 class PatientDetails extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            data: props.route.params,
+        };
+        // console.log(this.state);
+    }
 
-render(){
-    return (
-    <SafeAreaView style={styles.container}>
-        <View style={{marginTop: 20}}/>
-        {profileImage()}
-        <Text style={styles.centerText}>Patient Information</Text>
-        {generalInfo()}
-    </SafeAreaView>
+    render(){
+        return (
+        <SafeAreaView style={styles.container}>
+            <View style={{marginTop: 20}}/>
+            { profileImage() }
+            <Text style={styles.centerText}>Patient Information</Text>
+            { generalInfo(this.state) }
+        </SafeAreaView>
     );
 
-  function generalInfo() {
-    return <View style={[styles.contentView]}>
-      <Text style={styles.labelText}>Name:        Krisuv Bohara</Text>
-      <View style={[styles.dividerLine]} />
+    function generalInfo(patientDetails) {
+        return <View style={[styles.contentView]}>
+        <Text style={styles.labelText}>Name: { [patientDetails.data.first_name, patientDetails.data.last_name ].join(' ') }</Text>
+        <View style={[styles.dividerLine]} />
 
-      <Text style={[styles.labelText]}>Address:   Toronto, Canada</Text>
-      <View style={[styles.dividerLine]} />
-      <Text style={styles.labelText}>D.O.B:     Centennial College</Text>
-      <View style={[styles.dividerLine]} />
-      <Text style={styles.labelText}>Doctor:      MSI</Text>
-      <View style={[styles.dividerLine]} />
-      <Text style={styles.labelText}>Department:       React Native</Text>
-    </View>;
-  }
+        <Text style={[styles.labelText]}>Address:  {patientDetails.data.address}</Text>
+        <View style={[styles.dividerLine]} />
+        <Text style={styles.labelText}>D.O.B:     {patientDetails.data.date_of_birth}</Text>
+        <View style={[styles.dividerLine]} />
+        <Text style={styles.labelText}>Doctor:      {patientDetails.data.doctor}</Text>
+        <View style={[styles.dividerLine]} />
+        <Text style={styles.labelText}>Department:       {patientDetails.data.department}</Text>
+        </View>;
+    }
 
-  function profileImage() {
-    return <View style={[styles.imageView]}>
-      <Image source={require('../../assets/user.png')} style={[styles.imageStyle]} />
-    </View>;
-  }
-};
+    function profileImage() {
+        return <View style={[styles.imageView]}>
+        <Image source={require('../../assets/user.png')} style={[styles.imageStyle]} />
+        </View>;
+    }
+    };
 }
 
 const styles = StyleSheet.create({

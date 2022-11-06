@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, Image } from 'react-native';
 import { TouchableOpacity } from "react-native-gesture-handler";
+import {useNavigation} from "@react-navigation/native";
 
 class PatientsLists extends React.Component {
 
@@ -8,7 +9,7 @@ class PatientsLists extends React.Component {
       super();
       this.state = {
         data: []
-      }
+      };
     }
 
     componentDidMount(){
@@ -23,17 +24,16 @@ class PatientsLists extends React.Component {
       } catch (err) {
         console.warn({ message: err.message })
       }
-
     }
 
-    patientDetails = () => {
+    patientDetails = (item) => {
         const { navigation } = this.props
-        navigation.navigate('PatientDetails');
+        navigation.navigate('PatientDetails', item);
     }
 
    renderItem = ({ item }) => (
     <>
-    <TouchableOpacity onPress={this.patientDetails}>
+    <TouchableOpacity onPress = {() => this.patientDetails(item) }>
     <View style = {styles.item}>
         <Image source={require('../../assets/user.png')} style={[styles.imageStyle]} />
         <Text>       </Text>
@@ -47,13 +47,11 @@ class PatientsLists extends React.Component {
     render(){
     return (
         <SafeAreaView style={styles.container}>
-        {this.state.data == null ? <Text>Empty </Text> :
         <FlatList
             data={this.state.data}
             renderItem={this.renderItem}
             keyExtractor={item => item._id}
         />
-    }
         </SafeAreaView>
     );
     }
