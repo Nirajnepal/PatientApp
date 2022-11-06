@@ -12,18 +12,37 @@ class Home extends React.Component {
         navigation.navigate('PatientLists');
     }
 
+    addPatientScreen = () => {
+        const { navigation } = this.props
+        navigation.navigate('Add Patients');
+    }
+
     render(){
         return (
             <View style={styles.container}>
+                <View style ={styles.aa}>
+                <TouchableOpacity style = {styles.button} onPress = {this.openPatientDetails}>
+                <Image source={require('../../assets/user.png')} style={[styles.imageStyle]} />
+                <Text style={styles.labelStyle}>Patients</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style = {styles.button} onPress = {this.addPatientScreen}>
+                <Image source={require('../../assets/addPatient.png')} style={[styles.imageStyle]} />
+                <Text style={styles.labelStyle}>Add Patient</Text>
+                </TouchableOpacity>
+                </View>
+
+                {/* <View style ={styles.aa}>
                 <TouchableOpacity style = {styles.button} onPress = {this.openPatientDetails}>
                 <Image source={require('../../assets/user.png')} style={[styles.imageStyle]} />
                 <Text style={styles.labelStyle}>Patients</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style = {styles.button} onPress = {this.openPatientDetails}>
-                <Image source={require('../../assets/patient.png')} style={[styles.imageStyle]} />
-                <Text style={styles.labelStyle}>Records</Text>
+                <Image source={require('../../assets/addPatient.png')} style={[styles.imageStyle]} />
+                <Text style={styles.labelStyle}>Add Patient</Text>
                 </TouchableOpacity>
+                </View> */}
 
             </View>
         )
@@ -33,6 +52,11 @@ class Home extends React.Component {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
+        // flexDirection: 'row',
+        paddingHorizontal: 10,
+        paddingVertical: 10, 
+    },
+    aa:{
         flexDirection: 'row',
         paddingHorizontal: 10,
         paddingVertical: 10, 

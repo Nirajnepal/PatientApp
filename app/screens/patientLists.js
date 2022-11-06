@@ -21,7 +21,6 @@ class PatientsLists extends React.Component {
         let responseJson =  await response.json()
         this.setState({ data: responseJson })
       } catch (err) {
-        console.log("sadadssadasdsadasdasd console.log(sadadssadasdsadasdasd)")
         console.warn({ message: err.message })
       }
 
