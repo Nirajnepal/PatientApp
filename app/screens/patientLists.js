@@ -21,6 +21,7 @@ class PatientsLists extends React.Component {
         let responseJson =  await response.json()
         this.setState({ data: responseJson })
       } catch (err) {
+        console.log("sadadssadasdsadasdasd console.log(sadadssadasdsadasdasd)")
         console.warn({ message: err.message })
       }
 
@@ -47,11 +48,13 @@ class PatientsLists extends React.Component {
     render(){
     return (
         <SafeAreaView style={styles.container}>
+        {this.state.data == null ? <Text>Empty </Text> :
         <FlatList
             data={this.state.data}
             renderItem={this.renderItem}
             keyExtractor={item => item._id}
         />
+    }
         </SafeAreaView>
     );
     }
