@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, Text, View, SafeAreaView, Image, Divider } from 'react-native';
-import {useNavigation} from "@react-navigation/native";
 
 class PatientDetails extends React.Component{
     constructor(props){
@@ -38,7 +37,7 @@ class PatientDetails extends React.Component{
 
     function profileImage() {
         return <View style={[styles.imageView]}>
-        <Image source={require('../../assets/user.png')} style={[styles.imageStyle]} />
+        <Image source={require('../../../assets/user.png')} style={[styles.imageStyle]} />
         </View>;
     }
     };

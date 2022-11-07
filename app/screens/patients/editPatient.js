@@ -3,7 +3,7 @@ import { View, TextInput, Button, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
-class AddPatientScreen extends React.Component {
+class EditPatientScreen extends React.Component {
 
     constructor(){
         super();
@@ -63,7 +63,7 @@ class AddPatientScreen extends React.Component {
             style = {styles.textField}>                
             </TextInput>
 
-            <Button title='Submit' onPress={this.submit()}/>
+            <Button title='Submit' onPress={this.submit()} style = {styles.button}/>
             </View>
             </ScrollView>
         );
@@ -81,7 +81,10 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         padding: 20,
         margin: 10
-    }
+    },
+    button:{
+        borderRadius: 10,
+    },
 });
 
-export default AddPatientScreen
+export default EditPatientScreen

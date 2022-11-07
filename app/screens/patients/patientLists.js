@@ -35,7 +35,7 @@ class PatientsLists extends React.Component {
     <>
     <TouchableOpacity onPress = {() => this.patientDetails(item) }>
     <View style = {styles.item}>
-        <Image source={require('../../assets/user.png')} style={[styles.imageStyle]} />
+        <Image source={require('../../../assets/user.png')} style={[styles.imageStyle]} />
         <Text>       </Text>
         <Text style={styles.title}>{[item.first_name,item.last_name].join(' ')}</Text>
     </View>
