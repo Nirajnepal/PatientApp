@@ -3,6 +3,7 @@ import Home from "../app/screens/Home";
 import PatientDetails from '../app/screens/patients/patientDetails';
 import PatientsLists from '../app/screens/patients/patientLists';
 import AddPatientScreen from "../app/screens/patients/addPatient";
+import EditPatientScreen from "../app/screens/patients/editPatient";
 
 const Stack = createStackNavigator()
 
@@ -12,6 +13,7 @@ export default function Navigator() {
         <Stack.Screen name='Home' component={ Home } />
         <Stack.Screen name='PatientDetails' component={ PatientDetails } />
         <Stack.Screen name='PatientLists' component={ PatientsLists } />
+        <Stack.Screen name='Edit Patients' component={ EditPatientScreen } />
         <Stack.Screen name='Add Patients' component={ AddPatientScreen } />
       </Stack.Navigator>
   );

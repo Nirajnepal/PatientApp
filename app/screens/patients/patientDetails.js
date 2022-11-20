@@ -1,5 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, SafeAreaView, Image, Divider } from 'react-native';
+import {useNavigation} from "@react-navigation/native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 class PatientDetails extends React.Component{
     constructor(props){
@@ -7,14 +9,24 @@ class PatientDetails extends React.Component{
         this.state = {
             data: props.route.params,
         };
-        // console.log(this.state);
+        // console.log(props);
     }
+
+    editPatientDetails = (item) => {
+      const { navigation } = this.props
+      navigation.navigate('Edit Patients', item);
+    }
+
+
 
     render(){
         return (
         <SafeAreaView style={styles.container}>
             <View style={{marginTop: 20}}/>
             { profileImage() }
+            <TouchableOpacity onPress = {() => this.editPatientDetails(this.state) }>
+              <Text style={[styles.labelText]}>Edit</Text>
+            </TouchableOpacity>
             <Text style={styles.centerText}>Patient Information</Text>
             { generalInfo(this.state) }
         </SafeAreaView>
@@ -22,6 +34,9 @@ class PatientDetails extends React.Component{
 
     function generalInfo(patientDetails) {
         return <View style={[styles.contentView]}>
+        
+       
+        <Text style={[styles.labelText]}>Delete</Text>
         <Text style={styles.labelText}>Name: { [patientDetails.data.first_name, patientDetails.data.last_name ].join(' ') }</Text>
         <View style={[styles.dividerLine]} />
 
