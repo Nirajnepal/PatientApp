@@ -28,7 +28,7 @@ class PatientDetails extends React.Component{
               <Text style={[styles.labelText]}>Edit</Text>
             </TouchableOpacity>
             <Text style={styles.centerText}>Patient Information</Text>
-            { generalInfo(this.state) }
+            { generalInfo(this.state.data) }
         </SafeAreaView>
     );
 
@@ -37,16 +37,16 @@ class PatientDetails extends React.Component{
         
        
         <Text style={[styles.labelText]}>Delete</Text>
-        <Text style={styles.labelText}>Name: { [patientDetails.data.first_name, patientDetails.data.last_name ].join(' ') }</Text>
+        <Text style={styles.labelText}>Name: { [patientDetails.first_name, patientDetails.last_name ].join(' ') }</Text>
         <View style={[styles.dividerLine]} />
 
-        <Text style={[styles.labelText]}>Address:  {patientDetails.data.address}</Text>
+        <Text style={[styles.labelText]}>Address:  {patientDetails.address}</Text>
         <View style={[styles.dividerLine]} />
-        <Text style={styles.labelText}>D.O.B:     {patientDetails.data.date_of_birth}</Text>
+        <Text style={styles.labelText}>D.O.B:     {patientDetails.date_of_birth}</Text>
         <View style={[styles.dividerLine]} />
-        <Text style={styles.labelText}>Doctor:      {patientDetails.data.doctor}</Text>
+        <Text style={styles.labelText}>Doctor:      {patientDetails.doctor}</Text>
         <View style={[styles.dividerLine]} />
-        <Text style={styles.labelText}>Department:       {patientDetails.data.department}</Text>
+        <Text style={styles.labelText}>Department:       {patientDetails.department}</Text>
         </View>;
     }
 

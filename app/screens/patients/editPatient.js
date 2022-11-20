@@ -8,9 +8,9 @@ class EditPatientScreen extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            data: props.route.params
+            data: props.route.params.data
         }
-        console.log(this.state.data.data);
+        console.log(props);
     }
 
     async submit(){
@@ -49,14 +49,14 @@ class EditPatientScreen extends React.Component {
             <TextInput 
             onChangeText={(text)=> this.setState({first_name:text})}
             style = {styles.textField}
-            value={patientDetails.data.data.first_name} >              
+            value={patientDetails.data.first_name} >              
             </TextInput>
 
             <TextInput 
             placeholder='Enter Last Name'
             onChangeText={(text)=> this.setState({last_name:text})}
             style = {styles.textField}
-            value={patientDetails.data.data.last_name}>                
+            value={patientDetails.data.last_name}>                
             </TextInput>
 
             <TextInput 
