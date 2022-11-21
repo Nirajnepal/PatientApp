@@ -17,12 +17,8 @@ class PatientDetails extends React.Component{
       navigation.navigate('Edit Patients', item);
     }
 
-    async deletePatientDetails() {
-      
-    }
-
     submit= (patientRecords) => {
-      console.log(patientRecords);
+      console.log(patientRecords.data.date_of_birth);
     }
 
 
@@ -34,9 +30,6 @@ class PatientDetails extends React.Component{
             <TouchableOpacity onPress = {() => this.editPatientDetails(this.state) }>
               <Text style={[styles.labelText]}>Edit</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress = {() => this.editPatientDetails(this.state) }>
-              <Text style={[styles.labelText]}>Delete</Text>
-            </TouchableOpacity>
             <Text style={styles.centerText}>Patient Information</Text>
             { generalInfo(this.state.data) }
             <Button title='Records' onPress={() => this.submit(this.state)} style = {styles.button}/>
@@ -45,6 +38,9 @@ class PatientDetails extends React.Component{
 
     function generalInfo(patientDetails) {
         return <View style={[styles.contentView]}>
+        
+       
+        <Text style={[styles.labelText]}>Delete</Text>
         <Text style={styles.labelText}>Name: { [patientDetails.first_name, patientDetails.last_name ].join(' ') }</Text>
         <View style={[styles.dividerLine]} />
 
