@@ -29,7 +29,7 @@ class PatientsLists extends React.Component {
 
     patientDetails = (item) => {
         const { navigation } = this.props
-        navigation.navigate('PatientDetails', item);
+        navigation.navigate('Patient Details', item);
     }
 
    renderItem = ({ item }) => (

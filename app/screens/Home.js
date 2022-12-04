@@ -9,7 +9,7 @@ class Home extends React.Component {
 
     openPatientDetails = () => {
         const { navigation } = this.props
-        navigation.navigate('PatientLists');
+        navigation.navigate('Patient Lists');
     }
 
     addPatientScreen = () => {

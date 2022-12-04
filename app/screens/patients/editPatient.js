@@ -16,6 +16,7 @@ class EditPatientScreen extends React.Component {
             doctor: props.route.params.doctor,
             user_id: props.route.params._id
         }
+        console.log(props);
     }
 
     submit =  async () => {

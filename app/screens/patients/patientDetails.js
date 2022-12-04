@@ -3,20 +3,27 @@ import { StyleSheet, Text, View, ScrollView, Image, Divider, Button, Modal } fro
 import {useNavigation, StackActions, NavigationAction} from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
+let context;
+
 class PatientDetails extends React.Component{
     constructor(props){
         super(props);
+        this.addPatientsRecord = this.addPatientsRecord.bind(this)
+        context = this
         this.state = {
             data: props.route.params,
             isVisible: false,
-            patientRecord: [],
+            patientRecord: '',
             isRecordVisible: false
         };
     }
 
+    componentDidMount(){
+      this.forceUpdate();
+      this.showUserRecordsAPICall(this.state.data._id)
+    }
 
-    editPatientDetails = (item) => {
-      const { navigation } = this.props
+    editPatientDetails = ({navigation}) => {
       navigation.navigate('Edit Patients', item);
     }
 
@@ -34,40 +41,45 @@ class PatientDetails extends React.Component{
         const response = await fetch("http://192.168.5.10:8080/api/patients/"+id+"/records")
         const patientRecordJson = await response.json()
         this.setState({patientRecord: patientRecordJson})
-        console.log(this.state.patientRecord);
       } catch (error) {
         
       }
     }
 
-    componentDidMount(){
-      this.forceUpdate();
+    addPatientsRecord = () => {
+      const {navigation} = this.props
+      navigation.navigate('Add Record', this.state.data._id);
+    }
+
+    editPatientsRecord = (item) => {
+      const {navigation} = this.props
+      navigation.navigate('Edit Record', item);
     }
 
     async deletePatientDetails() {
-     try {
-      const response =await fetch("http://192.168.5.10:8080/api/patients/"+this.state.data._id,{
-        method: 'DELETE',
-        headers: { 
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json',
-          }
-        })
-      const responseRecord = await fetch("http://192.168.5.10:8080/api/patients/"+this.state.data._id+"/records",{
-        method: 'DELETE',
-        headers: { 
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json',
-          }
-        })
-        if(response.ok || responseRecord.ok){
-          const { navigation } = this.props
-          navigation.dispatch(StackActions.replace('PatientLists')); 
-        }
-     } catch (err) {
-        console.log(err);
+      try {
+       const response =await fetch("http://192.168.5.10:8080/api/patients/"+this.state.data._id,{
+         method: 'DELETE',
+         headers: { 
+             'Accept': 'application/json', 
+             'Content-Type': 'application/json',
+           }
+         })
+       const responseRecord = await fetch("http://192.168.5.10:8080/api/patients/"+this.state.data._id+"/records",{
+         method: 'DELETE',
+         headers: { 
+             'Accept': 'application/json', 
+             'Content-Type': 'application/json',
+           }
+         })
+         if(response.ok || responseRecord.ok){
+           const { navigation } = this.props
+           navigation.dispatch(StackActions.replace('PatientLists')); 
+         }
+      } catch (err) {
+         console.log(err);
+      }
      }
-    }
 
 
     render(){
@@ -103,7 +115,10 @@ class PatientDetails extends React.Component{
             { generalInfo(this.state.data) }
             <Button 
               title='View Records' 
-              onPress={() => { this.showUserRecordsAPICall(this.state.data._id); this.displayRecords(this.state.recordDetails = !this.state.recordDetails)}} 
+              onPress={() => { 
+                this.showUserRecordsAPICall(this.state.data._id); 
+                this.displayRecords(this.state.recordDetails = !this.state.recordDetails)
+              }} 
               style = {styles.button}
             />
             { this.state.isRecordVisible && this.state.patientRecord._id && recordsInfo(this.state.patientRecord)}
@@ -127,6 +142,7 @@ class PatientDetails extends React.Component{
     }
 
     function recordsInfo(recordDetails) {
+      console.log(recordDetails);
       return <View style={[styles.contentView]}>
       <Text style={styles.labelText}>Nurse Name: {recordDetails.nurse_name}</Text>
       <View style={[styles.dividerLine]} />
@@ -141,15 +157,18 @@ class PatientDetails extends React.Component{
       <Text style={styles.labelText}>Height: {recordDetails.height}</Text>
       <View style={[styles.dividerLine]} />
       <Text style={styles.labelText}>Weight: {recordDetails.weight}</Text>
+      <TouchableOpacity>
+        <Text style={[styles.labelText]} onPress={() =>  context.editPatientsRecord(recordDetails)  }>Edit Record</Text>
+      </TouchableOpacity>
       </View>;
     }
 
     function addRecordsInfo(recordDetails) {
-      return <View style={[styles.contentView]}>
+      return <View style={[styles.contentView]} keyboardShouldPersistTaps='always'>
       <View style={[styles.dividerLine]} />
       <Text style={styles.labelText}>{recordDetails.message}</Text>
       <TouchableOpacity>
-        <Text style={[styles.labelText]}>Add Record</Text>
+        <Text style={[styles.labelText]} onPress={() =>  context.addPatientsRecord()  }>Add Record</Text>
       </TouchableOpacity>
       </View>;
     }
