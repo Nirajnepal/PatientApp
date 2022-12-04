@@ -1,7 +1,7 @@
 import React from 'react'
-import { View, TextInput, Button, StyleSheet } from 'react-native';
+import { View, TextInput, Button, StyleSheet} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import {useNavigation} from "@react-navigation/native";
+import {useNavigation, StackActions} from "@react-navigation/native";
 
 class AddPatientScreen extends React.Component {
 
@@ -25,26 +25,35 @@ class AddPatientScreen extends React.Component {
                     'Accept': 'application/json', 
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(this.state)
+                body: JSON.stringify({
+                    first_name: this.state.first_name,
+                    last_name: this.state.last_name,
+                    address: this.state.address,
+                    date_of_birth: this.state.date_of_birth,
+                    department: this.state.department,
+                    doctor: this.state.doctor  
+                })
             })
-            let responsePatients = await response.json()
-            // console.log(responsePatients);
-            if(responsePatients._id){
+            let responsePatients = await response.json()    
+            // console.log(responsePatients); 
+            if(response.ok){
                 const { navigation } = this.props
-                navigation.navigate('PatientDetails', responsePatients);
-            }
+                navigation.dispatch(StackActions.replace('PatientDetails', responsePatients));   
+            } 
+            else{
+                throw new Error()
+            }   
         } catch (err) {
-            console.log({ message: err.message })
+            console.log(err)
         }
-        // const { navigation } = this.props
-        // navigation.navigate('PatientDetails', patient);
     }
+
+    
     
     render(){
         return(
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps='always'>
             <View style = {styles.container}>
-
             <TextInput 
             placeholder='Enter First Name'
             onChangeText={(text)=> this.setState({first_name:text})}

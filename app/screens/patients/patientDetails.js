@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, View, SafeAreaView, Image, Divider, Button } from 'react-native';
-import {useNavigation} from "@react-navigation/native";
+import { StyleSheet, Text, View, ScrollView, Image, Divider, Button, Modal } from 'react-native';
+import {useNavigation, StackActions, NavigationAction} from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 class PatientDetails extends React.Component{
@@ -8,39 +8,107 @@ class PatientDetails extends React.Component{
         super(props);
         this.state = {
             data: props.route.params,
+            isVisible: false,
+            patientRecord: [],
+            isRecordVisible: false
         };
-        // console.log(props);
     }
+
 
     editPatientDetails = (item) => {
       const { navigation } = this.props
       navigation.navigate('Edit Patients', item);
     }
 
-    async deletePatientDetails() {
-      
+      // hide show modal
+    displayModal(show){
+      this.setState({isVisible: show})
     }
 
-    submit= (patientRecords) => {
-      console.log(patientRecords);
+    displayRecords(show){
+      this.setState({isRecordVisible: !show})
+    }
+
+    async showUserRecordsAPICall(id){
+      try {
+        const response = await fetch("http://192.168.5.10:8080/api/patients/"+id+"/records")
+        const patientRecordJson = await response.json()
+        this.setState({patientRecord: patientRecordJson})
+        console.log(this.state.patientRecord);
+      } catch (error) {
+        
+      }
+    }
+
+    componentDidMount(){
+      this.forceUpdate();
+    }
+
+    async deletePatientDetails() {
+     try {
+      const response =await fetch("http://192.168.5.10:8080/api/patients/"+this.state.data._id,{
+        method: 'DELETE',
+        headers: { 
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json',
+          }
+        })
+      const responseRecord = await fetch("http://192.168.5.10:8080/api/patients/"+this.state.data._id+"/records",{
+        method: 'DELETE',
+        headers: { 
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json',
+          }
+        })
+        if(response.ok || responseRecord.ok){
+          const { navigation } = this.props
+          navigation.dispatch(StackActions.replace('PatientLists')); 
+        }
+     } catch (err) {
+        console.log(err);
+     }
     }
 
 
     render(){
         return (
-        <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
             <View style={{marginTop: 20}}/>
             { profileImage() }
-            <TouchableOpacity onPress = {() => this.editPatientDetails(this.state) }>
+            <TouchableOpacity onPress = {() => this.editPatientDetails(this.state.data) }>
               <Text style={[styles.labelText]}>Edit</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress = {() => this.editPatientDetails(this.state) }>
+            <Modal
+                animationType = {"slide"}
+                transparent={false}
+                visible={this.state.isVisible}
+                >
+                <View style={styles.modalContainer}>
+                  <Text style = { styles.text }>
+                      Are you sure?</Text>
+                  <Text 
+                    style={styles.closeText}
+                    onPress={() => {
+                      this.displayModal(!this.state.isVisible);}}>Cancel</Text>
+                  <Text 
+                    style={styles.closeText}
+                    onPress={() => {
+                      this.deletePatientDetails()}}>Yes</Text>
+                </View>
+            </Modal>
+            <TouchableOpacity onPress = {() => this.displayModal(true)}>
               <Text style={[styles.labelText]}>Delete</Text>
             </TouchableOpacity>
             <Text style={styles.centerText}>Patient Information</Text>
             { generalInfo(this.state.data) }
-            <Button title='Records' onPress={() => this.submit(this.state)} style = {styles.button}/>
-        </SafeAreaView>
+            <Button 
+              title='View Records' 
+              onPress={() => { this.showUserRecordsAPICall(this.state.data._id); this.displayRecords(this.state.recordDetails = !this.state.recordDetails)}} 
+              style = {styles.button}
+            />
+            { this.state.isRecordVisible && this.state.patientRecord._id && recordsInfo(this.state.patientRecord)}
+            { this.state.isRecordVisible && this.state.patientRecord.message && addRecordsInfo(this.state.patientRecord)}
+        </ScrollView>
     );
 
     function generalInfo(patientDetails) {
@@ -56,6 +124,34 @@ class PatientDetails extends React.Component{
         <View style={[styles.dividerLine]} />
         <Text style={styles.labelText}>Department:       {patientDetails.department}</Text>
         </View>;
+    }
+
+    function recordsInfo(recordDetails) {
+      return <View style={[styles.contentView]}>
+      <Text style={styles.labelText}>Nurse Name: {recordDetails.nurse_name}</Text>
+      <View style={[styles.dividerLine]} />
+      <Text style={[styles.labelText]}>Date Record Added: {recordDetails.date}</Text>
+      <View style={[styles.dividerLine]} />
+      <Text style={styles.labelText}>Blood Pressure: {recordDetails.blood_pressure}</Text>
+      <View style={[styles.dividerLine]} />
+      <Text style={styles.labelText}>Blood Oxygen Level: {recordDetails.blood_oxygen_level}</Text>
+      <View style={[styles.dividerLine]} />
+      <Text style={styles.labelText}>Heartbeat Rate: {recordDetails.heartbeat_rate}</Text>
+      <View style={[styles.dividerLine]} />
+      <Text style={styles.labelText}>Height: {recordDetails.height}</Text>
+      <View style={[styles.dividerLine]} />
+      <Text style={styles.labelText}>Weight: {recordDetails.weight}</Text>
+      </View>;
+    }
+
+    function addRecordsInfo(recordDetails) {
+      return <View style={[styles.contentView]}>
+      <View style={[styles.dividerLine]} />
+      <Text style={styles.labelText}>{recordDetails.message}</Text>
+      <TouchableOpacity>
+        <Text style={[styles.labelText]}>Add Record</Text>
+      </TouchableOpacity>
+      </View>;
     }
 
     function profileImage() {
@@ -103,6 +199,20 @@ const styles = StyleSheet.create({
   dividerLine:{
     borderBottomColor: 'grey',
     borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  closeText: {
+    fontSize: 24,
+    color: '#00479e',
+    textAlign: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 300,
+    width: 400,
+    backgroundColor: '#ffffff',
+    minHeight: 100
   }
 });
 
