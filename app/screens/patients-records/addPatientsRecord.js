@@ -43,7 +43,7 @@ class AddPatientRecordScreen extends React.Component{
             console.log(responseRecords); 
             if(response.ok){
                 const { navigation } = this.props
-                navigation.dispatch(StackActions.replace('PatientLists'));   
+                navigation.dispatch(StackActions.replace('Patient Lists'));   
             }
         } catch (err) {
             console.log(err)

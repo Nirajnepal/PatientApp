@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, Image } from 'react-native';
 import { TouchableOpacity } from "react-native-gesture-handler";
-import {useNavigatio, StackActionsn} from "@react-navigation/native";
+import {useNavigatio, StackActionsn, useIsFocused} from "@react-navigation/native";
 
 class PatientsLists extends React.Component {
 
@@ -13,7 +13,6 @@ class PatientsLists extends React.Component {
     }
 
     componentDidMount(){
-      this.forceUpdate()
       this.apiCall()
     }
 

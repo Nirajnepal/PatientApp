@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, ScrollView, Image, Divider, Button, Modal } from 'react-native';
-import {useNavigation, StackActions, NavigationAction} from "@react-navigation/native";
+import {useNavigation, StackActions, NavigationAction, useIsFocused} from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 let context;
@@ -20,10 +20,10 @@ class PatientDetails extends React.Component{
 
     componentDidMount(){
       this.forceUpdate();
-      this.showUserRecordsAPICall(this.state.data._id)
     }
 
-    editPatientDetails = ({navigation}) => {
+    editPatientDetails = (item) => {
+      const {navigation} = this.props
       navigation.navigate('Edit Patients', item);
     }
 
@@ -74,11 +74,25 @@ class PatientDetails extends React.Component{
          })
          if(response.ok || responseRecord.ok){
            const { navigation } = this.props
-           navigation.dispatch(StackActions.replace('PatientLists')); 
+           navigation.dispatch(StackActions.replace('Patient Lists')); 
          }
       } catch (err) {
          console.log(err);
       }
+     }
+
+     async deletePatientRecord(){
+      const responseRecord = await fetch("http://192.168.5.10:8080/api/patients/"+this.state.data._id+"/records",{
+         method: 'DELETE',
+         headers: { 
+             'Accept': 'application/json', 
+             'Content-Type': 'application/json',
+           }
+         })
+         if(responseRecord.ok){
+          const { navigation } = this.props
+          navigation.dispatch(StackActions.replace('Patient Lists')); 
+        }
      }
 
 
@@ -142,7 +156,6 @@ class PatientDetails extends React.Component{
     }
 
     function recordsInfo(recordDetails) {
-      console.log(recordDetails);
       return <View style={[styles.contentView]}>
       <Text style={styles.labelText}>Nurse Name: {recordDetails.nurse_name}</Text>
       <View style={[styles.dividerLine]} />
@@ -160,6 +173,27 @@ class PatientDetails extends React.Component{
       <TouchableOpacity>
         <Text style={[styles.labelText]} onPress={() =>  context.editPatientsRecord(recordDetails)  }>Edit Record</Text>
       </TouchableOpacity>
+      <TouchableOpacity>
+        <Text style={[styles.labelText]} onPress={() => context.displayModal(true) }>Delete Record</Text>
+      </TouchableOpacity>
+      <Modal
+          animationType = {"slide"}
+          transparent={false}
+          visible={context.state.isVisible}
+          >
+          <View style={styles.modalContainer}>
+            <Text style = { styles.text }>
+                Are you sure?</Text>
+            <Text 
+              style={styles.closeText}
+              onPress={() => {
+                context.displayModal(!context.state.isVisible);}}>Cancel</Text>
+            <Text 
+              style={styles.closeText}
+              onPress={() => {
+                context.deletePatientRecord()}}>Yes</Text>
+          </View>
+      </Modal>
       </View>;
     }
 

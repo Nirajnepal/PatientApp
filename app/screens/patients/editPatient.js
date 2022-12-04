@@ -40,7 +40,7 @@ class EditPatientScreen extends React.Component {
             let responsePatients = await response.json()  
             if(response.ok){
                 const { navigation } = this.props
-                navigation.dispatch(StackActions.replace('PatientDetails', responsePatients));  
+                navigation.dispatch(StackActions.replace('Patient Details', responsePatients));  
             }   
         } catch (err) {
             console.log(err)
