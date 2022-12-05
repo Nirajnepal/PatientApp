@@ -17,7 +17,7 @@ class EditPatientRecordScreen extends React.Component{
             weight: props.route.params.weight,
             user_id: props.route.params.user_id
         }
-        console.log(this.state.nurse_name);
+        // console.log(this.state.nurse_name);
     }
 
     async submit(){

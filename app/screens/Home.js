@@ -22,27 +22,15 @@ class Home extends React.Component {
             <View style={styles.container}>
                 <View style ={styles.aa}>
                 <TouchableOpacity style = {styles.button} onPress = {this.openPatientDetails}>
-                <Image source={require('../../assets/user.png')} style={[styles.imageStyle]} />
+                <Image testID="userImage" source={require('../../assets/user.png')} style={[styles.imageStyle]} />
                 <Text style={styles.labelStyle}>Patients</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style = {styles.button} onPress = {this.addPatientScreen}>
-                <Image source={require('../../assets/addPatient.png')} style={[styles.imageStyle]} />
+                <Image  testID="addImage" source={require('../../assets/addPatient.png')} style={[styles.imageStyle]} />
                 <Text style={styles.labelStyle}>Add Patient</Text>
                 </TouchableOpacity>
                 </View>
-
-                {/* <View style ={styles.aa}>
-                <TouchableOpacity style = {styles.button} onPress = {this.openPatientDetails}>
-                <Image source={require('../../assets/user.png')} style={[styles.imageStyle]} />
-                <Text style={styles.labelStyle}>Patients</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style = {styles.button} onPress = {this.openPatientDetails}>
-                <Image source={require('../../assets/addPatient.png')} style={[styles.imageStyle]} />
-                <Text style={styles.labelStyle}>Add Patient</Text>
-                </TouchableOpacity>
-                </View> */}
 
             </View>
         )
