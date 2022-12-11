@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, ScrollView, Image, Divider, Button, Modal } from 'react-native';
-import {useNavigation, StackActions, NavigationAction, useIsFocused} from "@react-navigation/native";
+import {useNavigation, StackActions, NavigationAction, useIsFocused, NavigationEvents} from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 let context;
@@ -8,18 +8,26 @@ let context;
 class PatientDetails extends React.Component{
     constructor(props){
         super(props);
-        this.addPatientsRecord = this.addPatientsRecord.bind(this)
         context = this
         this.state = {
             data: props.route.params,
             isVisible: false,
             patientRecord: '',
-            isRecordVisible: false
+            isRecordVisible: false,
+            refresh: 0
         };
+        
     }
 
-    componentDidMount(){
-      this.forceUpdate();
+    componentDidMount() {
+      const {navigation} = this.props
+      this._unsubscribe = navigation.addListener('focus', () => {
+        this.setState({})
+      });
+    }
+  
+    componentWillUnmount() {
+      this._unsubscribe();
     }
 
     editPatientDetails = (item) => {
@@ -91,7 +99,7 @@ class PatientDetails extends React.Component{
          })
          if(responseRecord.ok){
           const { navigation } = this.props
-          navigation.dispatch(StackActions.replace('Patient Lists')); 
+          navigation.dispatch(StackActions.replace('Patient Details', this.state.data)); 
         }
      }
 
@@ -137,6 +145,7 @@ class PatientDetails extends React.Component{
             />
             { this.state.isRecordVisible && this.state.patientRecord._id && recordsInfo(this.state.patientRecord)}
             { this.state.isRecordVisible && this.state.patientRecord.message && addRecordsInfo(this.state.patientRecord)}
+            
         </ScrollView>
     );
 

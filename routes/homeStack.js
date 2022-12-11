@@ -1,5 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from "../app/screens/Home";
+import Login from "../app/screens/Login";
+import Register from "../app/screens/Register";
 import PatientDetails from '../app/screens/patients/patientDetails';
 import PatientsLists from '../app/screens/patients/patientLists';
 import AddPatientScreen from "../app/screens/patients/addPatient";
@@ -11,7 +13,9 @@ const Stack = createStackNavigator()
 
 export default function Navigator() {
   return (
-      <Stack.Navigator initialRouteName='Home'>
+      <Stack.Navigator initialRouteName='Login'>
+        <Stack.Screen name='Login' component={ Login } />
+        <Stack.Screen name='Register' component={ Register } />
         <Stack.Screen name='Home' component={ Home } />
         <Stack.Screen name='Patient Details' component={ PatientDetails } />
         <Stack.Screen name='Patient Lists' component={ PatientsLists } />
