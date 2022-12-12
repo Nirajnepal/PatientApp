@@ -1,34 +1,41 @@
 import React from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text, Image } from 'react-native';
 import { TouchableOpacity } from "react-native-gesture-handler";
-import {useNavigatio, StackActionsn, useIsFocused} from "@react-navigation/native";
+import {useNavigatio, StackActions, useIsFocused} from "@react-navigation/native";
 
 class PatientsLists extends React.Component {
 
-    constructor(){
-      super();
+    constructor(props){
+      super(props);
+      
       this.state = {
-        data: []
+        data: [],
       };
+      console.log(this.state.data);
     }
 
     componentDidMount(){
       this.apiCall()
     }
 
+    //Function to fetch patient details
     async apiCall(){
       try {
-        let response = await fetch("http://192.168.5.10:8080/api/patients");
+        let response = await fetch("http://192.168.5.10:8080/api/patients")
         let responseJson =  await response.json()
+        console.log(responseJson);
         this.setState({ data: responseJson })
       } catch (err) {
         console.warn({ message: err.message })
       }
     }
 
+    // function to navigate to patient details screen with props
     patientDetails = (item) => {
         const { navigation } = this.props
-        navigation.navigate('Patient Details', item);
+        navigation.dispatch(
+          StackActions.replace('Patient Details', item)
+        )
     }
 
    renderItem = ({ item }) => (

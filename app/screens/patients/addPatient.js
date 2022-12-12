@@ -17,6 +17,7 @@ class AddPatientScreen extends React.Component {
         }
     }
 
+    // function to make post api call to add patient details
     async submit(){
         try {
             const response = await fetch("http://192.168.5.10:8080/api/patients",{

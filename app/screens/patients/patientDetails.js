@@ -19,31 +19,23 @@ class PatientDetails extends React.Component{
         
     }
 
-    componentDidMount() {
-      const {navigation} = this.props
-      this._unsubscribe = navigation.addListener('focus', () => {
-        this.setState({})
-      });
-    }
-  
-    componentWillUnmount() {
-      this._unsubscribe();
-    }
-
+    // function to navigate to edit patient screen with patient details
     editPatientDetails = (item) => {
       const {navigation} = this.props
       navigation.navigate('Edit Patients', item);
     }
 
-      // hide show modal
+    // hide show modal
     displayModal(show){
       this.setState({isVisible: show})
     }
 
+    //Function to toggle the display records
     displayRecords(show){
       this.setState({isRecordVisible: !show})
     }
 
+    //Function to fetch records of patient records
     async showUserRecordsAPICall(id){
       try {
         const response = await fetch("http://192.168.5.10:8080/api/patients/"+id+"/records")
@@ -54,16 +46,19 @@ class PatientDetails extends React.Component{
       }
     }
 
+    // function to navigate to add patient records screen with user id
     addPatientsRecord = () => {
       const {navigation} = this.props
       navigation.navigate('Add Record', this.state.data._id);
     }
 
+    // function to navigate to edit patient records screen with record details
     editPatientsRecord = (item) => {
       const {navigation} = this.props
       navigation.navigate('Edit Record', item);
     }
 
+    // function to delete patient details along with patient record
     async deletePatientDetails() {
       try {
        const response =await fetch("http://192.168.5.10:8080/api/patients/"+this.state.data._id,{
@@ -82,13 +77,14 @@ class PatientDetails extends React.Component{
          })
          if(response.ok || responseRecord.ok){
            const { navigation } = this.props
-           navigation.dispatch(StackActions.replace('Patient Lists')); 
+           navigation.dispatch(StackActions.replace('Patient Lists', {})); 
          }
       } catch (err) {
          console.log(err);
       }
      }
 
+     // function to delete patient record
      async deletePatientRecord(){
       const responseRecord = await fetch("http://192.168.5.10:8080/api/patients/"+this.state.data._id+"/records",{
          method: 'DELETE',
@@ -108,10 +104,14 @@ class PatientDetails extends React.Component{
         return (
         <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
             <View style={{marginTop: 20}}/>
+
             { profileImage() }
-            <TouchableOpacity onPress = {() => this.editPatientDetails(this.state.data) }>
-              <Text style={[styles.labelText]}>Edit</Text>
+
+          <View style={{flexDirection: "row", marginTop: 20}}>
+          <TouchableOpacity style={styles.editButton} onPress = {() => this.editPatientDetails(this.state.data) }>
+              <Text style={[styles.editlabelText]}>Edit</Text>
             </TouchableOpacity>
+
             <Modal
                 animationType = {"slide"}
                 transparent={false}
@@ -130,11 +130,16 @@ class PatientDetails extends React.Component{
                       this.deletePatientDetails()}}>Yes</Text>
                 </View>
             </Modal>
-            <TouchableOpacity onPress = {() => this.displayModal(true)}>
-              <Text style={[styles.labelText]}>Delete</Text>
+
+            <TouchableOpacity style={styles.deleteButton} onPress = {() => this.displayModal(true)}>
+              <Text style={[styles.deleteLabelText]}>Delete</Text>
             </TouchableOpacity>
+          </View>
+
             <Text style={styles.centerText}>Patient Information</Text>
+
             { generalInfo(this.state.data) }
+
             <Button 
               title='View Records' 
               onPress={() => { 
@@ -143,12 +148,14 @@ class PatientDetails extends React.Component{
               }} 
               style = {styles.button}
             />
+
             { this.state.isRecordVisible && this.state.patientRecord._id && recordsInfo(this.state.patientRecord)}
             { this.state.isRecordVisible && this.state.patientRecord.message && addRecordsInfo(this.state.patientRecord)}
             
         </ScrollView>
     );
 
+    // Function to display general info of patients
     function generalInfo(patientDetails) {
         return <View style={[styles.contentView]}>
         <Text style={styles.labelText}>Name: { [patientDetails.first_name, patientDetails.last_name ].join(' ') }</Text>
@@ -164,6 +171,7 @@ class PatientDetails extends React.Component{
         </View>;
     }
 
+    // Functions to display records information of patients
     function recordsInfo(recordDetails) {
       return <View style={[styles.contentView]}>
       <Text style={styles.labelText}>Nurse Name: {recordDetails.nurse_name}</Text>
@@ -179,12 +187,14 @@ class PatientDetails extends React.Component{
       <Text style={styles.labelText}>Height: {recordDetails.height}</Text>
       <View style={[styles.dividerLine]} />
       <Text style={styles.labelText}>Weight: {recordDetails.weight}</Text>
-      <TouchableOpacity>
-        <Text style={[styles.labelText]} onPress={() =>  context.editPatientsRecord(recordDetails)  }>Edit Record</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={[styles.labelText]} onPress={() => context.displayModal(true) }>Delete Record</Text>
-      </TouchableOpacity>
+      <View style={{flexDirection: "row", marginBottom: 5}}>
+        <TouchableOpacity style={styles.editPatientRecord}>
+          <Text style={[styles.editlabelText]} onPress={() =>  context.editPatientsRecord(recordDetails)  }>Edit Record</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.deletePatientRecord}>
+          <Text style={[styles.deleteLabelText]} onPress={() => context.displayModal(true) }>Delete Record</Text>
+        </TouchableOpacity>
+      </View>
       <Modal
           animationType = {"slide"}
           transparent={false}
@@ -206,16 +216,18 @@ class PatientDetails extends React.Component{
       </View>;
     }
 
+    // Function to show the option to add records of the patient
     function addRecordsInfo(recordDetails) {
       return <View style={[styles.contentView]} keyboardShouldPersistTaps='always'>
       <View style={[styles.dividerLine]} />
       <Text style={styles.labelText}>{recordDetails.message}</Text>
-      <TouchableOpacity>
-        <Text style={[styles.labelText]} onPress={() =>  context.addPatientsRecord()  }>Add Record</Text>
+      <TouchableOpacity style={styles.addPatientRecord}>
+        <Text style={[styles.addLabelText]} onPress={() =>  context.addPatientsRecord()  }>Add Record</Text>
       </TouchableOpacity>
       </View>;
     }
 
+    // Function to show the default profile image 
     function profileImage() {
         return <View style={[styles.imageView]}>
         <Image source={require('../../../assets/user.png')} style={[styles.imageStyle]} />
@@ -236,17 +248,73 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-evenly'
   },
-  
   centerText :{
     marginTop: 20,
     textAlign: 'center',
     fontSize: 20,
     letterSpacing: 2.0,
     fontWeight: 'bold',
+    color: '#80669d'
   },
   additionalCenterText :{
     textAlign: 'center',
     fontSize: 20
+  },
+  editButton: {
+    backgroundColor: '#55c2da',
+    width: 55,
+    marginLeft: 10,
+    textAlign: "center",
+    color: 'red',
+    borderRadius: 5
+  },
+  editlabelText:{
+    color: 'white',
+    textAlign: "center",
+    margin: 7
+  },
+  deleteButton: {
+    backgroundColor: '#dd7973',
+    width: 55,
+    marginLeft: 10,
+    textAlign: "center",
+    color: 'red',
+    borderRadius: 5
+  },
+  deleteLabelText:{
+    color: 'white',
+    textAlign: "center",
+    margin: 7
+  },
+  editPatientRecord: {
+    backgroundColor: '#55c2da',
+    width: 110,
+    marginLeft: 10,
+    textAlign: "center",
+    color: 'red',
+    borderRadius: 5
+  },
+  deletePatientRecord: {
+    backgroundColor: '#dd7973',
+    width: 110,
+    marginLeft: 10,
+    textAlign: "center",
+    color: 'red',
+    borderRadius: 5
+  },
+  addPatientRecord:{
+    backgroundColor: '#5adbb5',
+    width: 110,
+    marginLeft: 125,
+    marginBottom: 10,
+    textAlign: "center",
+    color: 'red',
+    borderRadius: 5
+  },
+  addLabelText:{
+    color: 'white',
+    textAlign: "center",
+    margin: 7
   },
   labelText:{
     color: 'black', padding: 10, letterSpacing: 0.5

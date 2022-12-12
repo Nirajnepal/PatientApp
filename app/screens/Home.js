@@ -3,8 +3,8 @@ import { View, StyleSheet, Text, Image } from 'react-native';
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 class Home extends React.Component {
-    constructor(props){
-        super(props);
+    constructor(){
+        super();
     }
 
     openPatientDetails = () => {
