@@ -18,8 +18,10 @@ configure({ adapter: new Adapter() });
 describe(Home, ()=>{
     let wrapper;
     beforeEach(() => {
+        //Used shallow to test or check wheather the Home is Present as a component
         wrapper = shallow(<Home></Home>);
     });
+    //will return true if the screen exist
     it('should render home components in home screen', function(){
         expect(wrapper.exists()).toBeTruthy();        
     }) 
@@ -67,6 +69,9 @@ describe(AddPatientScreen, ()=>{
 
 describe(EditPatientScreen, ()=>{
     let wrapper;
+    //the data should be passed from the details page to the edit page which will be displayed in the textfield.
+
+    //this is the mock parameter or prop
     beforeEach(() => {
         const mockedParams = {
             route: { params: { 
@@ -80,6 +85,8 @@ describe(EditPatientScreen, ()=>{
           };
         wrapper = shallow(<EditPatientScreen {...mockedParams}></EditPatientScreen>);
     });
+
+    //will return true in case the data is passed
     it('should render EditPatientScreen components in Edit patient screen to have props', function(){
         expect(wrapper.exists()).toBeTruthy;        
     }) 
@@ -91,6 +98,8 @@ describe(EditPatientScreen, ()=>{
 */
 describe(AddPatientsRecord, ()=>{
     let wrapper;
+
+    //will be sending the user id. To bind the records of user's records
     beforeEach(() => {
         const mockedParams = {
             route: { params: { 
@@ -109,6 +118,7 @@ describe(AddPatientsRecord, ()=>{
 */
 describe(EditPatientsRecord, ()=>{
     let wrapper;
+    //will edit the user records Date.
     beforeEach(() => {
         const mockedParams = {
             route: { params: { 
